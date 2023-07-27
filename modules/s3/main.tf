@@ -2,7 +2,6 @@ resource "aws_s3_bucket" "s3_bucket_alb_access_logs" {
   bucket = var.bucket_name
   object_lock_enabled = false
   force_destroy = true
-
 }
 
 resource "aws_s3_bucket_policy" "example" {
