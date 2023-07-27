@@ -4,7 +4,17 @@ aws_profile = "default"
 aws_region = "us-east-1"
 project = "demo"
 
+#Ecr
+spring_container = "my-spring-app"
+
+#S3
+bucket_name = "haidm-infra-remote-state"
+
 #Network
+subnet_count = {
+  public  = 4,
+  private = 4
+}
 num_of_azs = ["a", "b"]
 vpc_cidr = "11.0.0.0/16"
 public_subnet_cidrs = ["11.0.0.0/24", "11.0.1.0/24", "11.0.2.0/24", "11.0.3.0/24"]

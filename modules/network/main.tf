@@ -29,7 +29,7 @@ module "nat" {
   source = "./nat_gateway"
 
   subnet_ids   = module.public_subnet.ids
-  subnet_count = length(var.public_subnet_cidrs)
+  subnet_count = length(var.availability_zones)
   environment  = var.environment
 }
 

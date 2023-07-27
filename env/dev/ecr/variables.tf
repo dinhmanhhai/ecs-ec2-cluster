@@ -6,10 +6,4 @@ variable "aws_profile" {
 }
 variable "aws_region" {}
 variable "project" {}
-variable "key_name" {
-  description = "Key for SSH"
-}
-variable "aws_ami_id" {}
-variable "instance_type" {}
-variable "bucket_name" {}
-
+variable "spring_container" {}
