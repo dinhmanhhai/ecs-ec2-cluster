@@ -5,7 +5,9 @@ aws_region = "us-east-1"
 project = "demo"
 
 #Ecr
-spring_container = "my-spring-app"
+ecr_names = ["spring-app", "node-js"]
+image_mutability = "MUTABLE" #"IMMUTABLE"
+encryption_type = "KMS"
 
 #S3
 bucket_name = "haidm-infra-remote-state"

@@ -5,6 +5,10 @@ variable "subnet_count" {
 
 variable "environment" {
   description = "The name of the environment"
+  validation {
+    condition     = contains(["prod", "stg", "dev"], var.environment)
+    error_message = "Error value for environment"
+  }
 }
 
 variable "aws_profile" {
