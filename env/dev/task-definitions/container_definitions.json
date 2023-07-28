@@ -1,0 +1,25 @@
+[
+  {
+    "name": "${name}",
+    "image": "${image}",
+    "entryPoint": [],
+    "environment": [],
+    "essential": true,
+    "logConfiguration": {
+      "logDriver": "awslogs",
+      "options": {
+        "awslogs-group": "${awslogs-group}",
+        "awslogs-region": "${awslogs-region}",
+        "awslogs-stream-prefix": "${awslogs-stream-prefix}"
+      }
+    },
+    "portMappings": [
+      {
+        "containerPort": ${port},
+        "hostPort": ${port}
+      }
+    ],
+    "cpu": 0,
+    "networkMode": "awsvpc"
+  }
+]

@@ -8,14 +8,23 @@ project = "demo"
 ecr_names = ["spring-app", "node-js"]
 image_mutability = "MUTABLE" #"IMMUTABLE"
 encryption_type = "KMS"
+container_port_mapping = {
+  spring-app : 9090,
+  node-js : 80,
+}
+
+#Alb
+deregistration_delay = 300
+health_check_path = "/haidm"
+target_type = "ip" # instance lambda
 
 #S3
 bucket_name = "haidm-infra-remote-state"
 
 #Network
 subnet_count = {
-  public  = 4,
-  private = 4
+  public  = 2,
+  private = 2
 }
 num_of_azs = ["a", "b"]
 vpc_cidr = "11.0.0.0/16"
@@ -26,6 +35,7 @@ private_subnet_cidrs = ["11.0.50.0/24", "11.0.51.0/24", "11.0.52.0/24", "11.0.53
 key_name = "haidm"
 instance_type = "t2.micro"
 aws_ami_id = "ami-04823729c75214919"
+cluster_names = ["app"]
 #max_size = 1
 #min_size = 1
 #desired_capacity = 1
