@@ -5,7 +5,7 @@ locals {
     "stg" : true,
   }
   create_public_repository = lookup(local.create_public_repository_values, var.environment)
-  force_delete = lookup(local.create_public_repository_values, var.environment)
+  force_delete             = lookup(local.create_public_repository_values, var.environment)
 }
 
 resource "aws_ecr_repository" "ecr" {
@@ -20,6 +20,7 @@ resource "aws_ecr_repository" "ecr" {
     scan_on_push = false
   }
 }
+
 resource "aws_ecr_lifecycle_policy" "ecr_policy" {
   count      = length(var.ecr_names)
   repository = aws_ecr_repository.ecr[count.index].name
@@ -28,7 +29,7 @@ resource "aws_ecr_lifecycle_policy" "ecr_policy" {
 }
 
 data "template_file" "ecr_policy" {
-  count = length(var.ecr_names)
+  count    = length(var.ecr_names)
   template = file("ecr_policy.json")
 
   vars = {

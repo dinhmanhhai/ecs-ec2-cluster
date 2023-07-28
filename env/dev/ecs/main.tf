@@ -1,7 +1,9 @@
-resource "aws_instance" "ec2_instance" {
-  ami           = var.aws_ami_id
-  count         = 1
-  subnet_id     = data.terraform_remote_state.network.outputs.public_subnet_ids[count.index]
-  instance_type = var.instance_type
-  key_name      = var.key_name
+locals {
+  prefix_name = "${var.project}-${var.environment}"
+  cluster_names = [for k in var.cluster_names : "${local.prefix_name}-${k}-cluster"]
+}
+
+resource "aws_ecs_cluster" "aws-ecs-cluster" {
+  count                = length(local.cluster_names)
+  name                 = element(local.cluster_names, count.index)
 }
