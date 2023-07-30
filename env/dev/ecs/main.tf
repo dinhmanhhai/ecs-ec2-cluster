@@ -6,4 +6,13 @@ locals {
 resource "aws_ecs_cluster" "aws-ecs-cluster" {
   count                = length(local.cluster_names)
   name                 = element(local.cluster_names, count.index)
+
+}
+
+resource "aws_ecs_capacity_provider" "ec2-ecs-provider" {
+  name = "${local.prefix_name}-ec2-provider"
+
+  auto_scaling_group_provider {
+    auto_scaling_group_arn = data.terraform_remote_state.asg.outputs.asg_arns[0]
+  }
 }

@@ -1,5 +1,7 @@
 locals {
   prefix_name = "${var.project}-${var.environment}"
+  port_listener = [80, 443]
+
 }
 resource "aws_security_group" "alb_sg" {
   name        = "${local.prefix_name}-alb-sg"
@@ -57,35 +59,59 @@ resource "aws_alb_target_group" "target_group" {
   }
 }
 
-resource "aws_alb_listener" "http" {
+resource "aws_alb_listener" "http-and-https" {
+  count = 2
   load_balancer_arn = aws_alb.alb.id
-  port = "80"
+  port = local.port_listener[count.index]
   protocol = "HTTP"
 
-#  default_action {
-#    type = "forward"
-#    target_group_arn = aws_alb_target_group.target_group[0].id
-#  }
+  default_action {
+    type = "fixed-response"
+
+    fixed_response {
+      content_type = "text/plain"
+      message_body = "NOT FOUND"
+      status_code  = "404"
+    }
+  }
 }
 
 resource "aws_lb_listener_rule" "http-forward" {
-  listener_arn = aws_lb_listener.front_end.arn
-  priority     = 100
+  count = length(data.terraform_remote_state.ecr.outputs.container_names)
+  listener_arn = aws_alb_listener.http-and-https[0].arn
+  priority     = count.index + 1
 
   action {
     type             = "forward"
-    target_group_arn = aws_lb_target_group.static.arn
+    target_group_arn = aws_alb_target_group.target_group[count.index].arn
   }
 
   condition {
     path_pattern {
-      values = ["/static/*"]
+      values = [lookup(var.path_mapping, data.terraform_remote_state.ecr.outputs.container_names[count.index])]
     }
   }
 
-  condition {
-    host_header {
-      values = ["example.com"]
-    }
-  }
+#  condition {
+#    host_header {
+#      values = ["example.com"]
+#    }
+#  }
 }
+
+#data "aws_route53_zone" "domain" {
+#  name         = "${var.domain_name}."
+#  private_zone = "${var.private_zone}"
+#}
+#
+#resource "aws_route53_record" "hostname" {
+#  zone_id = "${data.aws_route53_zone.domain.zone_id}"
+#  name    = "${var.host_name != "" ? format("%s.%s", var.host_name, data.aws_route53_zone.domain.name) : format("%s", data.aws_route53_zone.domain.name)}"
+#  type    = "A"
+#
+#  alias {
+#    name                   = "${module.alb.alb_dns_name}"
+#    zone_id                = "${module.alb.alb_zone_id}"
+#    evaluate_target_health = true
+#  }
+#}

@@ -15,18 +15,8 @@ variable "aws_region" {}
 variable "project" {}
 
 variable "bucket_name" {}
-
-variable "container_port_mapping" {}
-
-variable "deregistration_delay" {
-  default = "300"
-}
-variable "health_check_path" {}
-variable "path_mapping" {}
-variable "target_type" {
-  type = string
-  validation {
-    condition     = contains(["instance", "lambda", "ip"], var.target_type)
-    error_message = "Error value for target_type"
-  }
-}
+variable "aws_ami_id" {}
+variable "key_name" {}
+variable "instance_type" {}
+variable "cluster_names" {}
+variable "volume_type" {}
