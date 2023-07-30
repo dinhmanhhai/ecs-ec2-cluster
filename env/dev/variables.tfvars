@@ -17,6 +17,10 @@ container_port_mapping = {
 deregistration_delay = 300
 health_check_path = "/haidm"
 target_type = "ip" # instance lambda
+path_mapping = {
+  spring-app : "/spring/*",
+  node-js : "/node/*",
+}
 
 #S3
 bucket_name = "haidm-infra-remote-state"
@@ -31,10 +35,11 @@ vpc_cidr = "11.0.0.0/16"
 public_subnet_cidrs = ["11.0.0.0/24", "11.0.1.0/24", "11.0.2.0/24", "11.0.3.0/24"]
 private_subnet_cidrs = ["11.0.50.0/24", "11.0.51.0/24", "11.0.52.0/24", "11.0.53.0/24"]
 
-#Ecs
+#Ec2
 key_name = "haidm"
-instance_type = "t2.micro"
-aws_ami_id = "ami-04823729c75214919"
+instance_type = "t3a.nano"
+aws_ami_id = "ami-0f5bf24b7bc6002ff"
+volume_type = "gp3"
 cluster_names = ["app"]
 #max_size = 1
 #min_size = 1
