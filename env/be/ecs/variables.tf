@@ -25,4 +25,7 @@ variable "bucket_name" {
 variable "cluster_names" {
   type = list(string)
 }
+variable "cluster_settings" {
+  type = map(string)
+}
 

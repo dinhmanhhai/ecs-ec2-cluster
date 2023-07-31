@@ -43,7 +43,8 @@ locals {
 
 module "ecs" {
   count = length(local.cluster_names)
-  source = "terraform-aws-modules/ecs/aws"
+#  source = "terraform-aws-modules/ecs/aws"
+  source = "../../../modules/ecs"
 
   cluster_name = element(local.cluster_names, count.index)
 
@@ -65,31 +66,32 @@ module "ecs" {
         maximum_scaling_step_size = 5
         minimum_scaling_step_size = 1
         status                    = "ENABLED"
-        target_capacity           = 2
+        target_capacity           = 1
       }
 
       default_capacity_provider_strategy = {
-        weight = 60
-        base   = 20
+        weight = 100
+        base   = 0
       }
     }
-    two = {
-      auto_scaling_group_arn         = data.terraform_remote_state.asg.outputs.asg_arns[count.index]
-      managed_termination_protection = "ENABLED"
-
-      managed_scaling = {
-        maximum_scaling_step_size = 15
-        minimum_scaling_step_size = 5
-        status                    = "ENABLED"
-        target_capacity           = 90
-      }
-
-      default_capacity_provider_strategy = {
-        weight = 40
-      }
-    }
+#    two = {
+#      auto_scaling_group_arn         = data.terraform_remote_state.asg.outputs.asg_arns[count.index]
+#      managed_termination_protection = "ENABLED"
+#
+#      managed_scaling = {
+#        maximum_scaling_step_size = 15
+#        minimum_scaling_step_size = 5
+#        status                    = "ENABLED"
+#        target_capacity           = 90
+#      }
+#
+#      default_capacity_provider_strategy = {
+#        weight = 40
+#      }
+#    }
   }
-
+  autoscaling_min_capacity = data.terraform_remote_state.asg.outputs.autoscaling_min_capacity[count.index]
+  autoscaling_max_capacity = data.terraform_remote_state.asg.outputs.autoscaling_max_capacity[count.index]
 #  tags = {
 #    Environment = "Development"
 #    Project     = "EcsEc2"

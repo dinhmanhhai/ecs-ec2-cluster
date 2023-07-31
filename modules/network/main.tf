@@ -1,7 +1,3 @@
-locals {
-  create_nat = 1
-}
-
 module "vpc" {
   source = "./vpc"
 
@@ -33,7 +29,7 @@ module "nat" {
   source = "./nat_gateway"
 
   subnet_ids   = module.public_subnet.ids
-  subnet_count = local.create_nat != 0 ? length(var.availability_zones) : 0
+  subnet_count = var.create_nat ? length(var.availability_zones) : 0
   environment  = var.environment
 }
 
@@ -45,7 +41,7 @@ resource "aws_route" "public_igw_route" {
 }
 
 resource "aws_route" "private_nat_route" {
-  count                  = local.create_nat != 0 ? length(var.private_subnet_cidrs) : 0
+  count                  = var.create_nat ? length(var.private_subnet_cidrs) : 0
   route_table_id         = element(module.private_subnet.route_table_ids, count.index)
   nat_gateway_id         = element(module.nat.ids, count.index)
   destination_cidr_block = var.destination_cidr_block

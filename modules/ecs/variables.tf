@@ -31,7 +31,7 @@ variable "cluster_settings" {
   type        = map(string)
   default = {
     name  = "containerInsights"
-    value = "enabled"
+    value = "disabled"
   }
 }
 
@@ -182,4 +182,14 @@ variable "services" {
   description = "Map of service definitions to create"
   type        = any
   default     = {}
+}
+
+variable "autoscaling_min_capacity" {
+  description = "Minimum number of tasks to run in your service"
+  type        = number
+}
+
+variable "autoscaling_max_capacity" {
+  description = "Maximum number of tasks to run in your service"
+  type        = number
 }

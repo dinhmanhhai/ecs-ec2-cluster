@@ -17,3 +17,6 @@ variable "project" {}
 variable "bucket_name" {}
 
 variable "container_port_mapping" {}
+variable "assign_public_ip_for_tasks" {
+  type = bool
+}

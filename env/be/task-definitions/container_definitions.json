@@ -20,6 +20,6 @@
       }
     ],
     "cpu": 0,
-    "networkMode": "awsvpc"
+    "networkMode": "${networkMode}"
   }
 ]

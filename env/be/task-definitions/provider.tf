@@ -1,7 +1,7 @@
 terraform {
   backend "s3" {
     bucket = "haidm-infra-remote-state"
-    key    = "fargate/fargate.tfstate"
+    key    = "task/task.tfstate"
     region = "us-east-1"
   }
   required_providers {
