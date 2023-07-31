@@ -4,6 +4,9 @@ aws_profile = "default"
 aws_region = "us-east-1"
 project = "demo"
 
+#Service-ecs
+assign_public_ip_for_tasks = false
+
 #Ecr
 ecr_names = ["spring-app", "node-js"]
 image_mutability = "MUTABLE" #"IMMUTABLE"
@@ -11,6 +14,10 @@ encryption_type = "KMS"
 container_port_mapping = {
   spring-app : 9090,
   node-js : 80,
+}
+cluster_settings = {
+  name  = "containerInsights"
+  value = "disabled"
 }
 
 #Alb
@@ -26,6 +33,7 @@ path_mapping = {
 bucket_name = "haidm-infra-remote-state"
 
 #Network
+create_nat = true
 subnet_count = {
   public  = 2,
   private = 2
@@ -37,7 +45,7 @@ private_subnet_cidrs = ["11.0.50.0/24", "11.0.51.0/24", "11.0.52.0/24", "11.0.53
 
 #Ec2
 key_name = "haidm"
-instance_type = "t3a.nano"
+instance_type = "t3a.small"
 aws_ami_id = "ami-0f5bf24b7bc6002ff"
 volume_type = "gp3"
 cluster_names = ["app"]

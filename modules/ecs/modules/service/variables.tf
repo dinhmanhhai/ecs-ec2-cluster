@@ -562,13 +562,11 @@ variable "enable_autoscaling" {
 variable "autoscaling_min_capacity" {
   description = "Minimum number of tasks to run in your service"
   type        = number
-  default     = 1
 }
 
 variable "autoscaling_max_capacity" {
   description = "Maximum number of tasks to run in your service"
   type        = number
-  default     = 10
 }
 
 variable "autoscaling_policies" {

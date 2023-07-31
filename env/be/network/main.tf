@@ -1,8 +1,8 @@
 locals {
-  private_cidrs = slice(var.private_subnet_cidrs, 0, lookup(var.subnet_count, "private"))
-  public_cidrs = slice(var.public_subnet_cidrs, 0, lookup(var.subnet_count, "public"))
+  private_cidrs      = slice(var.private_subnet_cidrs, 0, lookup(var.subnet_count, "private"))
+  public_cidrs       = slice(var.public_subnet_cidrs, 0, lookup(var.subnet_count, "public"))
   availability_zones = [for k in var.num_of_azs : "${var.aws_region}${k}"]
-  prefix_name = "${var.project}-${var.environment}"
+  prefix_name        = "${var.project}-${var.environment}"
 }
 
 module "network" {
@@ -13,6 +13,7 @@ module "network" {
   public_subnet_cidrs  = local.public_cidrs
   vpc_cidr             = var.vpc_cidr
   prefix_name          = local.prefix_name
+  create_nat           = var.create_nat
 }
 
 #module "s3_bucket" {

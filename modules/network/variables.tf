@@ -29,3 +29,8 @@ variable "availability_zones" {
   type        = list(any)
   description = "List of availability zones you want. Example: eu-west-1a and eu-west-1b"
 }
+
+variable "create_nat" {
+  type        = bool
+  description = "if create NAT"
+}

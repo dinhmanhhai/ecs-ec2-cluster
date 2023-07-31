@@ -40,10 +40,10 @@ resource "aws_launch_template" "launch_config" {
   key_name  = var.key_name
   user_data = base64encode(data.template_file.user_data[count.index].rendered)
   # https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/cpu-options-supported-instances-values.html
-  cpu_options {
-    core_count       = 1
-    threads_per_core = 2
-  }
+  #  cpu_options {
+  #    core_count       = 1
+  #    threads_per_core = 2
+  #  }
   credit_specification {
     cpu_credits = "standard"
   }
@@ -114,8 +114,8 @@ resource "aws_autoscaling_group" "asg" {
   force_delete              = true
   health_check_grace_period = 300
   wait_for_capacity_timeout = 0
-  #  target_group_arns = data.terraform_remote_state.alb.outputs.target_group_arns
-  protect_from_scale_in = true
+#  target_group_arns         = [data.terraform_remote_state.alb.outputs.target_group_arns[count.index]]
+  protect_from_scale_in     = true
   tag {
     key                 = "AmazonECSManaged"
     propagate_at_launch = true

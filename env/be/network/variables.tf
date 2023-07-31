@@ -34,3 +34,7 @@ variable "public_subnet_cidrs" {
 }
 
 variable "bucket_name" {}
+
+variable "create_nat" {
+  type = bool
+}
