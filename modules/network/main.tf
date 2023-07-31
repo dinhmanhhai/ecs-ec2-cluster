@@ -1,5 +1,5 @@
 locals {
-  create_nat = 0
+  create_nat = 1
 }
 
 module "vpc" {
