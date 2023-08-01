@@ -1,6 +1,6 @@
 locals {
 #  prefix_name = "${var.project}-${var.environment}"
-  repos = ["spring-app-terraform"]
+  repos = ["spring-app", "node-js"]
 }
 
 resource "aws_codecommit_repository" "repo" {

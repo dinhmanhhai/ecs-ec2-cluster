@@ -20,7 +20,7 @@ resource "aws_ecs_task_definition" "aws-ecs-task" {
 
 data "template_file" "ecr_policy" {
   count    = length(data.terraform_remote_state.ecr.outputs.container_names)
-  template = file("container_definitions.json")
+  template = file("${path.module}/templates/container-definitions.json")
 
   vars = {
     name                  = data.terraform_remote_state.ecr.outputs.container_names[count.index],
@@ -32,7 +32,3 @@ data "template_file" "ecr_policy" {
     port                  = tonumber(lookup(var.container_port_mapping, data.terraform_remote_state.ecr.outputs.container_names[count.index]))
   }
 }
-#data "aws_ecs_task_definition" "main" {
-#  count = length(data.terraform_remote_state.ecr.outputs.container_names)
-#  task_definition = aws_ecs_task_definition.aws-ecs-task.family[count.index]
-#}

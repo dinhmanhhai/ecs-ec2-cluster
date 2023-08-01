@@ -1,0 +1,18 @@
+{
+  "Version": "2012-10-17",
+  "Id": "DenyRoleAccess",
+  "Statement": [
+    {
+      "Sid": "DenyAllRole",
+      "Effect": "Deny",
+      "NotPrincipal": {
+        "AWS": "arn:aws:iam::400516100932:user/haidm1"
+      },
+      "Action": "s3:*",
+      "Resource": [
+        "arn:aws:s3:::haidm-infra-remote-state",
+        "arn:aws:s3:::haidm-infra-remote-state/*"
+      ]
+    }
+  ]
+}
