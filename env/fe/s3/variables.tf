@@ -1,3 +1,5 @@
+variable "bucket_name" {}
+
 variable "environment" {
   description = "The name of the environment"
   validation {
@@ -9,24 +11,19 @@ variable "environment" {
 variable "aws_profile" {
   description = "The AWS-CLI profile for the account to create resources in."
 }
-variable "aws_region" {}
-variable "project" {}
-variable "key_name" {
-  description = "Key for SSH"
-}
-variable "aws_ami_id" {
-  type = string
-}
-variable "instance_type" {
-  type = string
-}
-variable "bucket_name" {
-  type = string
-}
-variable "cluster_names" {
-  type = list(string)
-}
-variable "cluster_settings" {
-  type = map(string)
-}
 
+variable "aws_region" {}
+
+variable "project" {}
+
+variable "block_public_acls" {}
+
+variable "block_public_policy" {}
+
+variable "ignore_public_acls" {}
+
+variable "restrict_public_buckets" {}
+
+variable "bucket_key_enabled" {
+  type = bool
+}

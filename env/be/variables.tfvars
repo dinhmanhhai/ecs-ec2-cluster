@@ -12,6 +12,7 @@ networkMode              = "awsvpc"
 requires_compatibilities = ["EC2"] #["FARGATE"]
 task_cpu                 = 512
 task_memory              = 1024
+
 #Ecr
 ecr_names        = ["spring-app", "node-js"]
 image_mutability = "MUTABLE" #"IMMUTABLE"
@@ -38,7 +39,7 @@ path_mapping = {
 bucket_name = "haidm-infra-remote-state"
 
 #Network
-create_nat = true
+create_nat = false
 subnet_count = {
   public  = 2,
   private = 2
