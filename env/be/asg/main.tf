@@ -11,7 +11,7 @@ resource "aws_security_group" "ec2-ecs-sg" {
 resource "aws_security_group_rule" "inbound_ec2" {
   type                     = "ingress"
   from_port                = 0
-  to_port                  = 80
+  to_port                  = 35000
   protocol                 = "TCP"
   source_security_group_id = data.terraform_remote_state.alb.outputs.alb_sg_id
   security_group_id        = aws_security_group.ec2-ecs-sg.id
@@ -82,7 +82,6 @@ resource "aws_iam_role_policy_attachment" "ecsTaskExecutionRole_policy" {
   role       = aws_iam_role.role-ec2.name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEC2ContainerServiceforEC2Role"
 }
-
 
 resource "aws_iam_instance_profile" "iam_profile" {
   name = "${local.prefix_name}-ec2-profile"
