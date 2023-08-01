@@ -7,3 +7,6 @@ output "autoscaling_min_capacity" {
 output "autoscaling_max_capacity" {
   value = aws_autoscaling_group.asg[*].max_size
 }
+output "task_sg_id" {
+  value = aws_security_group.ec2-ecs-sg.id
+}

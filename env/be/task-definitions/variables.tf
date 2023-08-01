@@ -17,3 +17,11 @@ variable "project" {}
 variable "bucket_name" {}
 
 variable "container_port_mapping" {}
+
+variable "networkMode" {}
+
+variable "requires_compatibilities" {}
+
+variable "task_cpu" {}
+
+variable "task_memory" {}
