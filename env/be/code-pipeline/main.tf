@@ -2,8 +2,8 @@ locals {
   prefix_name = "${var.project}-${var.environment}"
 }
 
-resource "aws_codepipeline" "code_pipeline_node_js" {
-  name     = "${local.prefix_name}-codepipeline-node-js"
+resource "aws_codepipeline" "code_pipeline-ecs" {
+  name     = "${local.prefix_name}-codepipeline-${var.}"
   role_arn = "arn:aws:iam::400516100932:role/service-role/AWSCodePipelineServiceRole-us-east-1-angular"
 
 

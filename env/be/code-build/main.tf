@@ -1,5 +1,5 @@
 locals {
-  prefix_name = "${var.project}-${var.environment}"
+  prefix_name   = "${var.project}-${var.environment}"
 }
 
 resource "aws_codebuild_report_group" "code_build-report-group" {
@@ -11,7 +11,7 @@ resource "aws_codebuild_report_group" "code_build-report-group" {
 }
 
 resource "aws_codebuild_project" "code-build" {
-  name          = "${local.prefix_name}-codebuild-node-js"
+  name          = "${local.prefix_name}-codebuild-${var.ecr_names[0]}"
   description   = "${local.prefix_name}-codebuild"
   build_timeout = var.build_timeout
   service_role  = aws_iam_role.role_codebuild.arn
@@ -23,7 +23,7 @@ resource "aws_codebuild_project" "code-build" {
 
   cache {
     type     = "S3"
-    location = "${var.bucket_name}/${local.prefix_name}-build-cache"
+    location = "${var.bucket_name}/${local.prefix_name}-cache-${var.ecr_names[0]}"
     modes    = []
   }
 
@@ -33,7 +33,7 @@ resource "aws_codebuild_project" "code-build" {
     type                        = "LINUX_CONTAINER"
     image_pull_credentials_type = "CODEBUILD"
 
-    /* NOTE: not yet */
+    /* NOTE: not use yet */
     environment_variable {
       name  = "S3_BUCKET"
       value = data.terraform_remote_state.fe-s3.outputs.bucket
@@ -55,19 +55,15 @@ resource "aws_codebuild_project" "code-build" {
 
   source_version = lookup(var.branch_match, var.environment)
 
-  #  vpc_config {
-  #    vpc_id = aws_vpc.example.id
-  #
-  #    subnets = [
-  #      aws_subnet.example1.id,
-  #      aws_subnet.example2.id,
-  #    ]
-  #
-  #    security_group_ids = [
-  #      aws_security_group.example1.id,
-  #      aws_security_group.example2.id,
-  #    ]
-  #  }
+    vpc_config {
+      vpc_id = data.terraform_remote_state.network.outputs.vpc_id
+
+      subnets = data.terraform_remote_state.network.outputs.public_subnet_ids
+
+      security_group_ids = [
+        aws_security_group.code_build_sg.id
+      ]
+    }
 
   #  logs_config {
   #    cloudwatch_logs {
@@ -135,7 +131,26 @@ data "template_file" "base_build_policy" {
   vars = {
     codebuild-name = aws_codebuild_project.code-build.name
     cache_bucket   = var.cache_bucket_name
-    repo_arn       = lookup(data.terraform_remote_state.repository.outputs.repo_arns, "node-js")
+    repo_arn       = lookup(data.terraform_remote_state.repository.outputs.repo_arns, data.terraform_remote_state.repository.outputs.container_names[0])
     report_group   = aws_codebuild_report_group.code_build-report-group.arn
+  }
+}
+
+# Code build security
+resource "aws_security_group" "code_build_sg" {
+  name = "${aws_codebuild_project.code-build.name}-sg"
+  vpc_id = data.terraform_remote_state.network.outputs.vpc_id
+
+  ingress {
+    from_port = -1
+    to_port = -1
+    protocol = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  egress {
+    from_port = -1
+    to_port = -1
+    protocol = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
   }
 }

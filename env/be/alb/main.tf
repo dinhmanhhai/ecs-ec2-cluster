@@ -3,6 +3,7 @@ locals {
   port_listener = [80, 443]
 
 }
+
 resource "aws_security_group" "alb_sg" {
   name        = "${local.prefix_name}-alb-sg"
   vpc_id      = data.terraform_remote_state.network.outputs.vpc_id

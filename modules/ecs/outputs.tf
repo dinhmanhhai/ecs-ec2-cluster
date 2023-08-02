@@ -56,7 +56,7 @@ output "task_exec_iam_role_unique_id" {
 # Service(s)
 ################################################################################
 
-output "services" {
-  description = "Map of services created and their attributes"
-  value       = module.service
-}
+#output "services" {
+#  description = "Map of services created and their attributes"
+#  value       = module.service
+#}

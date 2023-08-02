@@ -1,0 +1,45 @@
+version: 0.2
+
+# env:
+#   variables:
+#     JAVA_HOME: "/usr/lib/jvm/java-11-openjdk-amd64"
+phases:
+  pre_build:
+    commands:
+      - ls /root/.m2
+      - ls /codebuild/local-cache/custom/a1cfd307206a48f78db47b611b03bcc588a057706799580a4d5091596451bb82/root/.m2
+      - docker login --username ${HUB_USERNAME} --password ${HUB_PASSWORD}
+      - mvn package -Dmaven.test.skip
+      - echo Logging in to Amazon ECR...
+      - aws --version
+      - aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin ${DOMAIN}
+      - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
+      - IMAGE_TAG=build-$(echo $CODEBUILD_BUILD_ID | awk -F":" '{print $2}')
+  build:
+    commands:
+      - echo Build started on `date`
+      - echo Building the Docker image...
+      - docker build --cache-from ${REPOSITORY_URI}:latest -t ${REPOSITORY_URI}:latest .
+      - docker tag ${REPOSITORY_URI}:latest ${REPOSITORY_URI}:${IMAGE_TAG}
+      - echo ${IMAGE_TAG}
+  post_build:
+    commands:
+      - echo Build completed on `date`
+      - echo Pushing the Docker images...
+      - docker push ${REPOSITORY_URI}:latest
+      - docker push ${REPOSITORY_URI}:${IMAGE_TAG}
+      - echo Writing image definitions file...
+      - printf '[{"name":"spring-app","imageUri":"%s"}]' ${REPOSITORY_URI}:${IMAGE_TAG} > imagedefinitions.json
+      - cat imagedefinitions.json
+      - docker rmi $(docker images -a -q) --force
+      - ls /root/.m2
+      - scp -r /root/.m2 /codebuild/local-cache/custom/a1cfd307206a48f78db47b611b03bcc588a057706799580a4d5091596451bb82/root/.m2
+      - ls /codebuild/local-cache/custom/a1cfd307206a48f78db47b611b03bcc588a057706799580a4d5091596451bb82/root/.m2
+artifacts:
+  files:
+    - imagedefinitions.json
+    - target/demo-0.0.1-SNAPSHOT.jar
+
+cache:
+  paths:
+    - '/root/.m2/**/*'

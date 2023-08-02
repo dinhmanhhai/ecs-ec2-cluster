@@ -4,7 +4,7 @@ locals {
 resource "aws_ecs_service" "worker" {
   count           = length(data.terraform_remote_state.task.outputs.task_ids)
   name            = "worker-${count.index}"
-  cluster         = data.terraform_remote_state.ecs.outputs.cluster_ids[0]
+  cluster         = lookup(data.terraform_remote_state.ecs.outputs.cluster_name_map_id, var.cluster_names[0])
   task_definition = data.terraform_remote_state.task.outputs.task_ids[count.index]
   desired_count   = 2
   network_configuration {
