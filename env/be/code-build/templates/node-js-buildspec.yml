@@ -6,19 +6,36 @@ phases:
       nodejs: 18
   pre_build:
     commands:
-      - echo Installing source NPM dependencies...
-      - npm install --legacy-peer-deps
-      - npm install -g @angular/cli
+      - docker login --username ${HUB_USERNAME} --password ${HUB_PASSWORD}
+      - echo Logging in to Amazon ECR...
+      - aws --version
+      - aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin ${DOMAIN}
+      - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
+      - IMAGE_TAG=build-$(echo $CODEBUILD_BUILD_ID | awk -F":" '{print $2}')
   build:
     commands:
       - echo Build started on `date`
+      - echo Installing source NPM dependencies...
+      - npm install --legacy-peer-deps
+      - npm install -g @angular/cli
       - ng build --configuration production --aot
+      - docker build --cache-from ${REPOSITORY_URI}:latest -t ${REPOSITORY_URI}:latest .
+      - docker tag ${REPOSITORY_URI}:latest ${REPOSITORY_URI}:${IMAGE_TAG}
   post_build:
     commands:
 #      - aws s3 sync dist s3://${S3_BUCKET} --recursive
+      - ls dist
       - echo Build completed on `date`
+      - echo Pushing the Docker images...
+      - docker push ${REPOSITORY_URI}:latest
+      - docker push ${REPOSITORY_URI}:${IMAGE_TAG}
+      - echo Writing image definitions file...
+      - printf '[{"name":"node-js","imageUri":"%s"}]' ${REPOSITORY_URI}:${IMAGE_TAG} > imagedefinitions.json
+      - cat imagedefinitions.json
+      - docker rmi $(docker images -a -q) --force
 artifacts:
   files:
+    - imagedefinitions.json
     - '**/*'
-  base-directory: 'dist*'
-  discard-paths: yes
+#  base-directory: 'dist*'
+#  discard-paths: yes

@@ -10,8 +10,8 @@ assign_public_ip_for_tasks = false
 #Task definition
 networkMode              = "awsvpc"
 requires_compatibilities = ["EC2"] #["FARGATE"]
-task_cpu                 = 512
-task_memory              = 1024
+task_cpu                 = 2048
+task_memory              = 2048
 
 #Ecr
 ecr_names        = ["spring-app", "node-js"]
@@ -28,7 +28,10 @@ cluster_settings = {
 
 #Alb
 deregistration_delay = 300
-health_check_path    = "/haidm"
+health_check_path    = {
+  spring-app : "/spring/haidm"
+  node-js : "/"
+}
 target_type          = "ip" # instance lambda
 path_mapping = {
   spring-app : "/spring/*",
@@ -39,7 +42,7 @@ path_mapping = {
 bucket_name = "haidm-infra-remote-state"
 
 #Network
-create_nat = false
+create_nat = true
 subnet_count = {
   public  = 2,
   private = 2
@@ -69,3 +72,65 @@ insecure_ssl = false
 badge_enabled = false
 build_timeout = "5"
 cache_bucket_name = "all-cache-and-log"
+env_vars= {
+  spring-app: [
+    {
+      name: "REPOSITORY_URI",
+      value: "400516100932.dkr.ecr.us-east-1.amazonaws.com/spring-app"
+      type: "PLAINTEXT"
+    },
+    {
+      name: "DOMAIN",
+      value: "400516100932.dkr.ecr.us-east-1.amazonaws.com"
+      type: "PLAINTEXT"
+    },
+    {
+      name: "HUB_USERNAME",
+      value: "cocainblue"
+      type: "PLAINTEXT"
+    },
+    {
+      name: "HUB_PASSWORD",
+      value: "Camvaonikbomay2"
+      type: "PLAINTEXT"
+    }
+  ],
+  node-js: [
+    {
+      name: "REPOSITORY_URI",
+      value: "400516100932.dkr.ecr.us-east-1.amazonaws.com/node-js"
+      type: "PLAINTEXT"
+    },
+    {
+      name: "DOMAIN",
+      value: "400516100932.dkr.ecr.us-east-1.amazonaws.com"
+      type: "PLAINTEXT"
+    },
+    {
+      name: "HUB_USERNAME",
+      value: "cocainblue"
+      type: "PLAINTEXT"
+    },
+    {
+      name: "HUB_PASSWORD",
+      value: "Camvaonikbomay2"
+      type: "PLAINTEXT"
+    }
+  ]
+}
+artifacts_type = "NO_ARTIFACTS"
+privileged_mode = true
+
+# Code pipeline
+stage_deploy_configure = {
+  spring-app : {
+    ClusterName : "demo-dev-app-cluster"
+    FileName : "imagedefinitions.json"
+    ServiceName: "demo-dev-spring-app"
+  }
+  node-js : {
+    ClusterName : "demo-dev-app-cluster"
+    FileName : "imagedefinitions.json"
+    ServiceName: "demo-dev-node-js"
+  }
+}

@@ -34,6 +34,6 @@ variable "badge_enabled" {
   type = bool
 }
 
-variable "extract_when_deploy" {
-  type = bool
+variable "stage_deploy_configure" {
+  type = map(any)
 }

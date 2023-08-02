@@ -1,7 +1,7 @@
 terraform {
   backend "s3" {
     bucket = "haidm-infra-remote-state"
-    key    = "codepipeline-ecs/codepipeline-ecs.tfstate"
+    key    = "ecr/ecr.tfstate"
     region = "us-east-1"
   }
   required_providers {

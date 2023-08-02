@@ -1,9 +1,11 @@
 locals {
   prefix_name = "${var.project}-${var.environment}"
+  count       = length(data.terraform_remote_state.ecr.outputs.container_names)
 }
 
 resource "aws_codepipeline" "code_pipeline-ecs" {
-  name     = "${local.prefix_name}-codepipeline-${var.}"
+  count    = local.count
+  name     = "${local.prefix_name}-codepipeline-${data.terraform_remote_state.ecr.outputs.container_names[count.index]}"
   role_arn = "arn:aws:iam::400516100932:role/service-role/AWSCodePipelineServiceRole-us-east-1-angular"
 
 
@@ -31,8 +33,8 @@ resource "aws_codepipeline" "code_pipeline-ecs" {
       configuration = {
         PollForSourceChanges = false
         OutputArtifactFormat = "CODE_ZIP"
-        RepositoryName = "node-js"
-        BranchName     = lookup(var.branch_match, var.environment)
+        RepositoryName       = data.terraform_remote_state.ecr.outputs.container_names[count.index]
+        BranchName           = lookup(var.branch_match, var.environment)
       }
     }
   }
@@ -41,15 +43,15 @@ resource "aws_codepipeline" "code_pipeline-ecs" {
     name = "Build"
 
     action {
-      name            = "Build"
-      category        = "Build"
-      owner           = "AWS"
-      provider        = "CodeBuild"
-      input_artifacts = ["source-data"]
-      version         = "1"
+      name             = "Build"
+      category         = "Build"
+      owner            = "AWS"
+      provider         = "CodeBuild"
+      input_artifacts  = ["source-data"]
+      version          = "1"
       output_artifacts = ["build-data"]
       configuration = {
-        ProjectName = data.terraform_remote_state.fe-codebuild.outputs.code-build-node-js-name
+        ProjectName = data.terraform_remote_state.codebuild-ecs.outputs.codebuild_project_ids[count.index]
       }
     }
   }
@@ -61,15 +63,12 @@ resource "aws_codepipeline" "code_pipeline-ecs" {
       name            = "Deploy"
       category        = "Deploy"
       owner           = "AWS"
-      provider        = "S3"
+      provider        = "ECS"
       input_artifacts = ["build-data"]
       version         = "1"
       region          = var.aws_region
 
-      configuration = {
-        BucketName = data.terraform_remote_state.fe-s3.outputs.bucket
-        Extract = var.extract_when_deploy
-      }
+      configuration = lookup(var.stage_deploy_configure, data.terraform_remote_state.ecr.outputs.container_names[count.index])
     }
   }
 }

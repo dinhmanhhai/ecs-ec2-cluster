@@ -11,19 +11,19 @@ resource "aws_codebuild_report_group" "code_build-report-group" {
 }
 
 resource "aws_codebuild_project" "code-build" {
-  name          = "${local.prefix_name}-codebuild-node-js"
+  name          = "${local.prefix_name}-codebuild-node-js-fe"
   description   = "${local.prefix_name}-codebuild"
   build_timeout = var.build_timeout
   service_role  = aws_iam_role.role_codebuild.arn
   badge_enabled = var.badge_enabled
-
+  depends_on = [aws_iam_role.role_codebuild]
   artifacts {
     type = "NO_ARTIFACTS"
   }
 
   cache {
     type     = "S3"
-    location = "${var.bucket_name}/${local.prefix_name}-build-cache"
+    location = "${var.cache_bucket_name}/${local.prefix_name}-build-cache"
     modes    = []
   }
 
@@ -130,7 +130,7 @@ resource "aws_iam_role_policy" "base_build_codebuild" {
 }
 
 data "template_file" "base_build_policy" {
-  template = file("${path.module}/templates/build-policy.json")
+  template = file("${path.module}/templates/base-policy.json")
 
   vars = {
     codebuild-name = aws_codebuild_project.code-build.name

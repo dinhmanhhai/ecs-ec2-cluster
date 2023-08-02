@@ -1,6 +1,6 @@
 variable "environment" {
   description = "The name of the environment"
-  type = string
+  type        = string
   validation {
     condition     = contains(["prod", "stg", "dev"], var.environment)
     error_message = "Error value for environment"
@@ -9,7 +9,7 @@ variable "environment" {
 
 variable "aws_profile" {
   description = "The AWS-CLI profile for the account to create resources in."
-  type = string
+  type        = string
 }
 
 variable "aws_region" {
@@ -25,7 +25,7 @@ variable "bucket_name" {
 }
 
 variable "cluster_names" {
-  type = string
+  type = list(string)
 }
 
 variable "branch_match" {
@@ -33,6 +33,10 @@ variable "branch_match" {
 }
 
 variable "insecure_ssl" {
+  type = bool
+}
+
+variable "privileged_mode" {
   type = bool
 }
 
@@ -48,6 +52,14 @@ variable "cache_bucket_name" {
   type = string
 }
 
+variable "artifacts_type" {
+  type = string
+}
+
 variable "ecr_names" {
   type = list(string)
+}
+
+variable "env_vars" {
+  type = any
 }

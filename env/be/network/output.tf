@@ -4,6 +4,9 @@ output "public_subnet_ids" {
 output "private_subnet_ids" {
   value = module.network.private_subnet_ids
 }
+output "private_subnet_arns" {
+  value = module.network.private_subnet_arns
+}
 output "depend_nat" {
   value = module.network.depend_nat
 }
