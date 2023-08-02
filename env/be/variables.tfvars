@@ -58,3 +58,14 @@ cluster_names = ["app"]
 #max_size = 1
 #min_size = 1
 #desired_capacity = 1
+
+#Code build
+branch_match = {
+  dev: "dev",
+  stg: "stg",
+  prod: "master"
+}
+insecure_ssl = false
+badge_enabled = false
+build_timeout = "5"
+cache_bucket_name = "all-cache-and-log"
