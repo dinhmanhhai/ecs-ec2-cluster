@@ -22,5 +22,7 @@ branch_match = {
   stg: "stg",
   prod: "master"
 }
-
 build_timeout = "5"
+
+#CDN
+create_cdn = true

@@ -37,3 +37,7 @@ variable "insecure_ssl" {
 variable "badge_enabled" {
   type = bool
 }
+
+variable "create_cdn" {
+  type = bool
+}

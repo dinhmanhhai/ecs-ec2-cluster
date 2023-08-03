@@ -30,7 +30,7 @@ cluster_settings = {
 deregistration_delay = 300
 health_check_path    = {
   spring-app : "/spring/haidm"
-  node-js : "/"
+  node-js : "/node"
 }
 target_type          = "ip" # instance lambda
 path_mapping = {
@@ -42,7 +42,7 @@ path_mapping = {
 bucket_name = "haidm-infra-remote-state"
 
 #Network
-create_nat = true
+create_nat = false
 subnet_count = {
   public  = 2,
   private = 2
