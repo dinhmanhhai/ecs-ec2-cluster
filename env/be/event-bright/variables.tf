@@ -5,16 +5,16 @@ variable "environment" {
     error_message = "Error value for environment"
   }
 }
-variable "aws_profile" {
-  description = "The AWS-CLI profile for the account to create resources in."
+
+variable "aws_region" {
+  type = string
 }
-variable "aws_region" {}
-variable "project" {}
-variable "ecr_names" {}
-variable "image_mutability" {
-  validation {
-    condition     = contains(["MUTABLE", "IMMUTABLE"], var.image_mutability)
-    error_message = "Error value for image_mutability"
-  }
+variable "project" {
+  type = string
 }
-variable "encryption_type" {}
+variable "bucket_name" {
+  type = string
+}
+variable "branch_match" {
+  type = map(any)
+}

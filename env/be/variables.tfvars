@@ -1,6 +1,5 @@
 #Global
 environment = "dev"
-aws_profile = "default"
 aws_region  = "us-east-1"
 project     = "demo"
 
@@ -8,7 +7,7 @@ project     = "demo"
 assign_public_ip_for_tasks = false
 
 #Task definition
-networkMode              = "awsvpc"
+networkMode              = "bridge"
 requires_compatibilities = ["EC2"] #["FARGATE"]
 task_cpu                 = 2048
 task_memory              = 2048
@@ -83,16 +82,6 @@ env_vars= {
       name: "DOMAIN",
       value: "400516100932.dkr.ecr.us-east-1.amazonaws.com"
       type: "PLAINTEXT"
-    },
-    {
-      name: "HUB_USERNAME",
-      value: "cocainblue"
-      type: "PLAINTEXT"
-    },
-    {
-      name: "HUB_PASSWORD",
-      value: "Camvaonikbomay2"
-      type: "PLAINTEXT"
     }
   ],
   node-js: [
@@ -104,16 +93,6 @@ env_vars= {
     {
       name: "DOMAIN",
       value: "400516100932.dkr.ecr.us-east-1.amazonaws.com"
-      type: "PLAINTEXT"
-    },
-    {
-      name: "HUB_USERNAME",
-      value: "cocainblue"
-      type: "PLAINTEXT"
-    },
-    {
-      name: "HUB_PASSWORD",
-      value: "Camvaonikbomay2"
       type: "PLAINTEXT"
     }
   ]

@@ -2,6 +2,7 @@ data "aws_caller_identity" "current" {}
 locals {
   prefix_name = "${var.project}-${var.environment}"
   count       = length(data.terraform_remote_state.ecr.outputs.container_names)
+  env_vars = 
 }
 
 resource "aws_codebuild_report_group" "code_build-report-group" {

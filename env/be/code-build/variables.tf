@@ -7,11 +7,6 @@ variable "environment" {
   }
 }
 
-variable "aws_profile" {
-  description = "The AWS-CLI profile for the account to create resources in."
-  type        = string
-}
-
 variable "aws_region" {
   type = string
 }

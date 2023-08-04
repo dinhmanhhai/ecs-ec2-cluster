@@ -1,6 +1,5 @@
 #Global
 environment = "dev"
-aws_profile = "default"
 aws_region  = "us-east-1"
 project     = "demo"
 

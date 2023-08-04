@@ -6,7 +6,6 @@ phases:
       nodejs: 18
   pre_build:
     commands:
-      - docker login --username ${HUB_USERNAME} --password ${HUB_PASSWORD}
       - echo Logging in to Amazon ECR...
       - aws --version
       - aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin ${DOMAIN}
