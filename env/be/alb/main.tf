@@ -55,7 +55,7 @@ resource "aws_alb_target_group" "target_group" {
     protocol            = "HTTP"
     matcher             = "200"
     timeout             = "3"
-    path                = var.health_check_path
+    path                = lookup(var.health_check_path, data.terraform_remote_state.ecr.outputs.container_names[count.index])
     unhealthy_threshold = "2"
   }
 }
@@ -77,7 +77,7 @@ resource "aws_alb_listener" "http-and-https" {
   }
 }
 
-resource "aws_lb_listener_rule" "http-forward" {
+resource "aws_lb_listener_rule" "http_forward" {
   count = length(data.terraform_remote_state.ecr.outputs.container_names)
   listener_arn = aws_alb_listener.http-and-https[0].arn
   priority     = count.index + 1

@@ -1,7 +1,7 @@
 terraform {
   backend "s3" {
     bucket = "haidm-infra-remote-state"
-    key    = "fe-codepipeline/fe-codepipeline.tfstate"
+    key    = "codepipeline-ecs/codepipeline-ecs.tfstate"
     region = "us-east-1"
   }
   required_providers {
@@ -14,7 +14,7 @@ terraform {
 
 provider "aws" {
   region  = var.aws_region
-  profile = var.aws_profile
+  profile = var.environment
   shared_config_files = [" ~/.aws/credentials"]
 
   default_tags {

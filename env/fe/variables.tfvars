@@ -1,6 +1,5 @@
 #Global
 environment = "dev"
-aws_profile = "default"
 aws_region  = "us-east-1"
 project     = "demo"
 
@@ -22,5 +21,7 @@ branch_match = {
   stg: "stg",
   prod: "master"
 }
-
 build_timeout = "5"
+
+#CDN
+create_cdn = true

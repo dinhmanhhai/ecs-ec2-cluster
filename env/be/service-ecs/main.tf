@@ -3,9 +3,10 @@ locals {
 }
 resource "aws_ecs_service" "worker" {
   count           = length(data.terraform_remote_state.task.outputs.task_ids)
-  name            = "worker-${count.index}"
+  name            = data.terraform_remote_state.task.outputs.task_ids[count.index]
   cluster         = lookup(data.terraform_remote_state.ecs.outputs.cluster_name_map_id, var.cluster_names[0])
   task_definition = data.terraform_remote_state.task.outputs.task_ids[count.index]
+  deployment_minimum_healthy_percent = 50
   desired_count   = 2
   network_configuration {
     assign_public_ip = var.assign_public_ip_for_tasks

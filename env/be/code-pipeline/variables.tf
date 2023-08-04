@@ -2,10 +2,6 @@ variable "branch_match" {
   type = map(any)
 }
 
-variable "aws_profile" {
-  type = string
-}
-
 variable "environment" {
   type = string
 }
@@ -34,6 +30,6 @@ variable "badge_enabled" {
   type = bool
 }
 
-variable "extract_when_deploy" {
-  type = bool
+variable "stage_deploy_configure" {
+  type = map(any)
 }

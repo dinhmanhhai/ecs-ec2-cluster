@@ -2,10 +2,6 @@ variable "branch_match" {
   type = map(any)
 }
 
-variable "aws_profile" {
-  type = string
-}
-
 variable "environment" {
   type = string
 }
@@ -35,5 +31,9 @@ variable "insecure_ssl" {
 }
 
 variable "badge_enabled" {
+  type = bool
+}
+
+variable "create_cdn" {
   type = bool
 }

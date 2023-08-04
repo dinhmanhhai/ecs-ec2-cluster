@@ -7,20 +7,20 @@ data "terraform_remote_state" "repository" {
   }
 }
 
-data "terraform_remote_state" "fe-s3" {
+data "terraform_remote_state" "ecr" {
   backend = "s3"
   config = {
     bucket = var.bucket_name
-    key    = "fe-s3/fe-s3.tfstate"
+    key    = "ecr/ecr.tfstate"
     region = var.aws_region
   }
 }
 
-data "terraform_remote_state" "fe-codebuild" {
+data "terraform_remote_state" "codebuild-ecs" {
   backend = "s3"
   config = {
     bucket = var.bucket_name
-    key    = "fe-codebuild/fe-codebuild.tfstate"
+    key    = "codebuild-ecs/codebuild-ecs.tfstate"
     region = var.aws_region
   }
 }

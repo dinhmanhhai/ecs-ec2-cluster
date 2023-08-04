@@ -5,9 +5,7 @@ variable "environment" {
     error_message = "Error value for environment"
   }
 }
-variable "aws_profile" {
-  description = "The AWS-CLI profile for the account to create resources in."
-}
+
 variable "aws_region" {}
 variable "project" {}
 variable "key_name" {

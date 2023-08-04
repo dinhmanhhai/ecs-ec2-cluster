@@ -1,11 +1,6 @@
 variable "branch_match" {
   type = map(any)
 }
-
-variable "aws_profile" {
-  type = string
-}
-
 variable "environment" {
   type = string
 }
